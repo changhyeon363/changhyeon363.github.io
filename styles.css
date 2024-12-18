@@ -28,3 +28,21 @@ nav ul li a {
 #content {
     padding: 20px;
 }
+
+#content ul {
+    list-style: none;
+    padding: 0;
+}
+
+#content ul li {
+    margin: 10px 0;
+}
+
+#content ul li a {
+    color: #333;
+    text-decoration: none;
+}
+
+#content ul li a:hover {
+    text-decoration: underline;
+}
