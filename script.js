@@ -1,8 +1,22 @@
+// 시작 페이지 로드 함수
+async function loadStartPage() {
+    const content = document.getElementById('content');
+    const markdown = await fetch('./markdown/start.md').then(res => res.text());
+    content.innerHTML = convertMarkdownToHtml(markdown);
+}
+
 // 게시물을 불러오고 표시하는 비동기 함수
 async function loadPosts() {
     // HTML에서 필요한 요소들을 가져옴
     const nav = document.getElementById('posts');
     const content = document.getElementById('content');
+    
+    // 홈 링크에 이벤트 리스너 추가
+    const homeLink = document.getElementById('homeLink');
+    homeLink.onclick = async (e) => {
+        e.preventDefault();
+        await loadStartPage();
+    };
 
     // List 링크 생성
     const li = document.createElement('li');
@@ -65,5 +79,8 @@ function convertMarkdownToHtml(markdown) {
         .replace(/\n/g, '<br>');                          // \n -> <br>
 }
 
-// 페이지 로드 시 게시물 목록 불러오기
-loadPosts();
+// 페이지 로드 시 시작 페이지와 게시물 목록 불러오기
+window.onload = async () => {
+    await loadStartPage();
+    await loadPosts();
+};
