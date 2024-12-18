@@ -1,7 +1,7 @@
 // 게시물을 불러오고 표시하는 비동기 함수
 async function loadPosts() {
     // posts.json 파일에서 게시물 데이터를 가져옴
-    const posts = await fetch('./markdown/posts.json').then(res => res.json());
+    const posts = await fetch('./posts.json').then(res => res.json());
     
     // HTML에서 필요한 요소들을 가져옴
     const nav = document.getElementById('posts');        // 게시물 목록을 표시할 네비게이션
