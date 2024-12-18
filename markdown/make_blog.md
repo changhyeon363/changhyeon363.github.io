@@ -1,7 +1,7 @@
 
 
 
-![파일 관계](static\picture\blog_dev_diagram.svg)
+![파일 관계](static/picture/blog_dev_diagram.svg)
 
 각 파일의 주요 역할:
 
