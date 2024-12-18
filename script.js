@@ -29,8 +29,8 @@ async function loadPosts() {
         // 기존 content 내용을 비움
         content.innerHTML = '';
         
-        // posts.json 파일에서 게시물 데이터를 가져옴
-        const posts = await fetch('./posts.json').then(res => res.json());
+        // posts.json 파일에서 게��물 데이터를 가져옴
+        const posts = await fetch('./static/posts.json').then(res => res.json());
         
         // 게시물 목록을 표시할 ul 요소 생성
         const postsList = document.createElement('ul');
@@ -63,20 +63,29 @@ async function loadPosts() {
 // 마크다운 텍스트를 HTML로 변환하는 함수
 function convertMarkdownToHtml(markdown) {
     return markdown
-        // 제목 변환 (h1, h2, h3)
-        .replace(/^# (.+)/gm, '<h1>$1</h1>')      // # 제목 -> <h1>제목</h1>
-        .replace(/^## (.+)/gm, '<h2>$1</h2>')     // ## 제목 -> <h2>제목</h2>
-        .replace(/^### (.+)/gm, '<h3>$1</h3>')    // ### 제목 -> <h3>제목</h3>
+        // 코드 블록 변환 (```)
+        .replace(/```[\s\S]*?\n([\s\S]*?)```/g, (match, code) => {
+            return `<pre><code>${code.replace(/\n$/, '')}</code></pre>`;
+        })
+        
+        // 인라인 코드 변환 (`)
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        
+        // 제목 변환
+        .replace(/^# (.+)/gm, '<h1>$1</h1>')
+        .replace(/^## (.+)/gm, '<h2>$1</h2>')
+        .replace(/^### (.+)/gm, '<h3>$1</h3>')
         
         // 텍스트 스타일 변환
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // **굵은글씨** -> <strong>굵은글씨</strong>
-        .replace(/\*(.+?)\*/g, '<em>$1</em>')             // *기울임* -> <em>기울임</em>
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
         
-        // 링크 변환
-        .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')  // [텍스트](링크) -> <a href="링크">텍스트</a>
+        // 링크와 이미지 변환
+        .replace(/!\[(.+?)\]\((.+?)\)/g, '<img src="$2" alt="$1">')
+        .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
         
-        // 줄바꿈 변환
-        .replace(/\n/g, '<br>');                          // \n -> <br>
+        // 줄바꿈 변환 (코드 블록 외부만)
+        .replace(/([^>])\n(?![<])/g, '$1<br>');
 }
 
 // 페이지 로드 시 시작 페이지와 게시물 목록 불러오기
